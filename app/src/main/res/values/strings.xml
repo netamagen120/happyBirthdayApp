@@ -3,4 +3,7 @@
     <string name="baby_name">name</string>
     <string name="baby_birth_day">birthday</string>
     <string name="continue_button">Show birthday screen</string>
+    <string name="select">select</string>
+    <string name="take_picture">take picture</string>
+    <string name="from_gallery">choose from gallery</string>
 </resources>
