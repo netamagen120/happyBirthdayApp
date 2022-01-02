@@ -7,5 +7,33 @@
     <fragment
         android:id="@+id/introFragment"
         android:name="com.example.happybirthday.IntroFragment"
-        tools:layout="@layout/intro_layout" />
+        tools:layout="@layout/intro_layout">
+        <action
+            android:id="@+id/action_introFragment_to_pelicanFragment"
+            app:destination="@id/pelicanFragment"
+            app:popUpTo="@id/introFragment"/>
+        <action
+            android:id="@+id/action_introFragment_to_foxFragment"
+            app:destination="@id/foxFragment"
+            app:popUpTo="@id/introFragment" />
+        <action
+            android:id="@+id/action_introFragment_to_elephantFragment"
+            app:destination="@id/elephantFragment"
+            app:popUpTo="@id/introFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/foxFragment"
+        android:name="com.example.happybirthday.FoxFragment"
+        tools:layout="@layout/anniversary_layout" />
+
+    <fragment
+        android:id="@+id/elephantFragment"
+        android:name="com.example.happybirthday.ElephantFragment"
+        tools:layout="@layout/anniversary_layout" />
+
+    <fragment
+        android:id="@+id/pelicanFragment"
+        android:name="com.example.happybirthday.PelicanFragment"
+        tools:layout="@layout/anniversary_layout" />
 </navigation>

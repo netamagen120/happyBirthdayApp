@@ -6,4 +6,9 @@
     <string name="select">select</string>
     <string name="take_picture">take picture</string>
     <string name="from_gallery">choose from gallery</string>
+    <string name="button_share_text">Share the news</string>
+    <string name="month">month</string>
+    <string name="years">years</string>
+    <string name="months">months</string>
+
 </resources>

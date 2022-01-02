@@ -10,11 +10,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.DatePicker
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import kotlinx.android.synthetic.main.intro_layout.*
+import java.util.*
 
 class IntroFragment : Fragment() {
     private val viewModel: BirthdayViewModel by activityViewModels()
@@ -49,12 +51,36 @@ class IntroFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         continueButton.isEnabled = false
+        val onContinueClicked = OnContinueClicked()
+        continueButton.setOnClickListener (onContinueClicked)
         val onTextChanged = OnTextChanged()
         babyName.addTextChangedListener(onTextChanged)
         val onDateChanged = OnDateChanged()
         birthDay.setOnDateChangedListener(onDateChanged)
+        birthDay.maxDate = Date().time // can chose birthday date until today
         val onIconClicked = OnIconClicked()
         babyIcon.setOnClickListener(onIconClicked)
+        // when chose date or when return to this fragment set last chosen date
+        viewModel.dateLiveData.observe(
+            viewLifecycleOwner, {
+                if (it) {
+                    birthDay.updateDate(viewModel.chosenYear, viewModel.chosenMonth, viewModel.chosenDay)
+                }
+            }
+        )
+    }
+
+    inner class OnContinueClicked : View.OnClickListener {
+        override fun onClick(v: View?) {
+            viewModel.apply {
+                name = babyName.text.toString()
+                val day = birthDay.dayOfMonth
+                val month = birthDay.month
+                val year = birthDay.year
+                setDateFromDatePicker(day, month, year)
+            }
+            (activity as MainActivity).navigateTo(viewModel.getRandomAction())
+        }
     }
 
     inner class OnIconClicked : View.OnClickListener {
