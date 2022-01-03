@@ -11,4 +11,7 @@
     <color name="fox_bg">#c5e8df</color>
     <color name="elephant_bg">#feefcb</color>
     <color name="pelican_bg">#daf1f6</color>
+    <color name="fox_circle">#6fc5af</color>
+    <color name="elephant_circle">#febe21</color>
+    <color name="pelican_circle">#8bd3e4</color>
 </resources>

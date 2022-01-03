@@ -1,5 +1,7 @@
 package com.example.happybirthday
 
+import android.graphics.Bitmap
+import android.net.Uri
 import android.widget.EditText
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -16,6 +18,8 @@ class BirthdayViewModel: ViewModel() {
     var chosenMonth = -1
     var chosenYear = -1
     var dateLiveData = MutableLiveData<Boolean>()
+    var anniversaryBitmap: Bitmap? = null
+    var anniversaryUri: Uri? = null
 
     fun getIfContinueEnabled(babyName: EditText): Boolean {
         return babyName.text.isNotEmpty() && pickDate

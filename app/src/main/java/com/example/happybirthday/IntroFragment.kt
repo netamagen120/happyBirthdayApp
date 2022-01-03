@@ -10,12 +10,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.DatePicker
-import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import kotlinx.android.synthetic.main.intro_layout.*
+import kotlinx.android.synthetic.main.intro_layout.view.*
+import java.time.Year
 import java.util.*
 
 class IntroFragment : Fragment() {
@@ -57,8 +58,12 @@ class IntroFragment : Fragment() {
         babyName.addTextChangedListener(onTextChanged)
         val onDateChanged = OnDateChanged()
         birthDay.setOnDateChangedListener(onDateChanged)
-        birthDay.maxDate = Date().time // can chose birthday date until today
-        val onIconClicked = OnIconClicked()
+        setPickerMinMaxDate()
+        val onIconClicked = (activity as MainActivity).OnIconClicked(
+            requireContext(),
+            takePictureResultLauncher,
+            galleryResultLauncher
+        )
         babyIcon.setOnClickListener(onIconClicked)
         // when chose date or when return to this fragment set last chosen date
         viewModel.dateLiveData.observe(
@@ -68,6 +73,13 @@ class IntroFragment : Fragment() {
                 }
             }
         )
+    }
+
+    private fun setPickerMinMaxDate() {
+        birthDay.maxDate = Date().time // can chose birthday date until today
+        val calendar = Calendar.getInstance()
+        calendar.add(Calendar.YEAR, -12)
+        birthDay.minDate = calendar.time.time // assume baby not more than 12 years :P
     }
 
     inner class OnContinueClicked : View.OnClickListener {
@@ -80,16 +92,6 @@ class IntroFragment : Fragment() {
                 setDateFromDatePicker(day, month, year)
             }
             (activity as MainActivity).navigateTo(viewModel.getRandomAction())
-        }
-    }
-
-    inner class OnIconClicked : View.OnClickListener {
-        override fun onClick(v: View?) {
-            PictureUtils.showChoosePictureDialog(
-                requireContext(),
-                takePictureResultLauncher,
-                galleryResultLauncher
-            )
         }
     }
 

@@ -1,7 +1,11 @@
 package com.example.happybirthday
 
+import android.content.Context
+import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.os.Bundle
+import android.view.View
+import androidx.activity.result.ActivityResultLauncher
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
@@ -22,6 +26,20 @@ class MainActivity : AppCompatActivity() {
 
     fun navigateTo(action: Int) {
         navController.navigate(action)
+    }
+
+    inner class OnIconClicked(
+        private val context: Context,
+        private val takePictureResultLauncher: ActivityResultLauncher<Intent>,
+        private val galleryResultLauncher: ActivityResultLauncher<Intent>
+    ) : View.OnClickListener {
+        override fun onClick(v: View?) {
+            PictureUtils.showChoosePictureDialog(
+                context,
+                takePictureResultLauncher,
+                galleryResultLauncher
+            )
+        }
     }
 
 }

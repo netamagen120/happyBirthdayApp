@@ -16,4 +16,8 @@ class ElephantFragment: AnniversaryFragment() {
     override fun getBackgroundColor(): Int {
         return R.color.elephant_bg
     }
+
+    override fun getCircleBgDrawable(): Int {
+        return R.drawable.yellow_circle
+    }
 }

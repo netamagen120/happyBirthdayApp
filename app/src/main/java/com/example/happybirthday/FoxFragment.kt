@@ -16,4 +16,8 @@ class FoxFragment: AnniversaryFragment() {
     override fun getBackgroundColor(): Int {
         return R.color.fox_bg
     }
+
+    override fun getCircleBgDrawable(): Int {
+        return R.drawable.green_circle
+    }
 }
