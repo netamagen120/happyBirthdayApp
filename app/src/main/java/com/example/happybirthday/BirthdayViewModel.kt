@@ -3,7 +3,6 @@ package com.example.happybirthday
 import android.graphics.Bitmap
 import android.net.Uri
 import android.widget.EditText
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import java.util.*
 

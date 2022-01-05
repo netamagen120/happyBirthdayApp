@@ -9,15 +9,12 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.InputMethodManager
 import android.widget.DatePicker
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import kotlinx.android.synthetic.main.intro_layout.*
-import kotlinx.android.synthetic.main.intro_layout.view.*
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.util.*
