@@ -9,14 +9,17 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.DatePicker
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import kotlinx.android.synthetic.main.intro_layout.*
 import kotlinx.android.synthetic.main.intro_layout.view.*
-import java.time.Year
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.util.*
 
 class IntroFragment : Fragment() {
@@ -48,7 +51,6 @@ class IntroFragment : Fragment() {
         return inflater.inflate(R.layout.intro_layout, container, false)
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         continueButton.isEnabled = false
@@ -57,7 +59,9 @@ class IntroFragment : Fragment() {
         val onTextChanged = OnTextChanged()
         babyName.addTextChangedListener(onTextChanged)
         val onDateChanged = OnDateChanged()
-        birthDay.setOnDateChangedListener(onDateChanged)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            birthDay.setOnDateChangedListener(onDateChanged)
+        }
         setPickerMinMaxDate()
         val onIconClicked = (activity as MainActivity).OnIconClicked(
             requireContext(),
@@ -66,13 +70,9 @@ class IntroFragment : Fragment() {
         )
         babyIcon.setOnClickListener(onIconClicked)
         // when chose date or when return to this fragment set last chosen date
-        viewModel.dateLiveData.observe(
-            viewLifecycleOwner, {
-                if (it) {
-                    birthDay.updateDate(viewModel.chosenYear, viewModel.chosenMonth, viewModel.chosenDay)
-                }
-            }
-        )
+        if (viewModel.pickDate) {
+            birthDay.updateDate(viewModel.chosenYear, viewModel.chosenMonth, viewModel.chosenDay)
+        }
     }
 
     private fun setPickerMinMaxDate() {
@@ -91,7 +91,13 @@ class IntroFragment : Fragment() {
                 val year = birthDay.year
                 setDateFromDatePicker(day, month, year)
             }
-            (activity as MainActivity).navigateTo(viewModel.getRandomAction())
+            (activity as MainActivity).apply {
+                lifecycleScope.launch {
+                    hideKeyboard()
+                    delay(1000L) //for next screen background not jumping
+                    navigateTo(viewModel.getRandomAction())
+                }
+            }
         }
     }
 

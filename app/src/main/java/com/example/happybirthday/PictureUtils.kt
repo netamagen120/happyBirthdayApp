@@ -6,13 +6,14 @@ import android.content.Intent
 import android.provider.MediaStore
 import androidx.activity.result.ActivityResultLauncher
 
+
 class PictureUtils {
 
     companion object {
         fun showChoosePictureDialog(
             context: Context,
-            takePictureResultLauncher: ActivityResultLauncher<Intent>,
-            galleryResultLauncher: ActivityResultLauncher<Intent>
+            takePictureResultLauncher: ActivityResultLauncher<Intent>?,
+            galleryResultLauncher: ActivityResultLauncher<Intent>?
         ) {
             val getImageFrom: AlertDialog.Builder = AlertDialog.Builder(context)
             getImageFrom.setTitle(context.resources.getString(R.string.select))
@@ -23,14 +24,14 @@ class PictureUtils {
             getImageFrom.setItems(opsChars) { dialog, which ->
                 if (which == 0) { // take picture
                     val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-                    takePictureResultLauncher.launch(cameraIntent)
+                    takePictureResultLauncher?.launch(cameraIntent)
                 } else if (which == 1) { // choose from gallery
                     val galleryIntent = Intent(
                         Intent.ACTION_PICK,
                         MediaStore.Images.Media.EXTERNAL_CONTENT_URI
                     )
                     galleryIntent.type = "image/*"
-                    galleryResultLauncher.launch(galleryIntent)
+                    galleryResultLauncher?.launch(galleryIntent)
                 }
                 dialog.dismiss()
             }

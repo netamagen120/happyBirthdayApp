@@ -17,7 +17,6 @@ class BirthdayViewModel: ViewModel() {
     var chosenDay = -1
     var chosenMonth = -1
     var chosenYear = -1
-    var dateLiveData = MutableLiveData<Boolean>()
     var anniversaryBitmap: Bitmap? = null
     var anniversaryUri: Uri? = null
 
@@ -42,7 +41,6 @@ class BirthdayViewModel: ViewModel() {
         val calendar = Calendar.getInstance()
         calendar.set(year, month, day)
         currDate = calendar.time
-        dateLiveData.postValue(pickDate)
     }
 
     fun getRelevantNumberIcon(): String {

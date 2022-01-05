@@ -1,6 +1,7 @@
 package com.example.happybirthday
 
 import android.app.Activity
+import android.content.Context
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -54,7 +55,7 @@ abstract class AnniversaryFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        containerLayout.setBackgroundColor(
+        screenContainer.setBackgroundColor(
             ContextCompat.getColor(
                 requireContext(),
                 getBackgroundColor()
@@ -81,7 +82,11 @@ abstract class AnniversaryFragment : Fragment() {
             setOnClickListener(onIconClicked)
             visibility = View.GONE
         }
-        containerLayout.viewTreeObserver.addOnGlobalLayoutListener(OnGlobalAnniversaryLayoutListener())
+        context?.let {
+            val onSharedClicked = OnShareClicked(it, screenContainer)
+            shareLayout.setOnClickListener(onSharedClicked)
+        }
+        screenContainer.viewTreeObserver.addOnGlobalLayoutListener(OnGlobalAnniversaryLayoutListener())
         // if pick already anniversary picture, show it
         viewModel.anniversaryBitmap?.let {
             profileImage.setImageBitmap(it)
@@ -95,7 +100,7 @@ abstract class AnniversaryFragment : Fragment() {
     inner class OnGlobalAnniversaryLayoutListener : ViewTreeObserver.OnGlobalLayoutListener {
         override fun onGlobalLayout() {
             val radius = babyIcon.measuredHeight / 2
-            val constraintLayout = containerLayout as ConstraintLayout
+            val constraintLayout = screenContainer as ConstraintLayout
             val constraintSet = ConstraintSet()
             // set image icon in 45 angle
             constraintSet.clone(constraintLayout)
@@ -110,9 +115,26 @@ abstract class AnniversaryFragment : Fragment() {
                 setImageResource(getDefaultCameraIcon())
                 visibility = View.VISIBLE
             }
-            containerLayout.viewTreeObserver.removeOnGlobalLayoutListener(this)
+            screenContainer.viewTreeObserver.removeOnGlobalLayoutListener(this)
         }
 
+    }
+
+    inner class OnShareClicked(
+        private val context: Context,
+        private val viewPicture: View
+    ) : View.OnClickListener {
+        override fun onClick(v: View?) {
+            setButtonsVisibility(View.GONE)
+            (activity as MainActivity).showShareOptions(context, viewPicture)
+            setButtonsVisibility(View.VISIBLE)
+        }
+    }
+
+    fun setButtonsVisibility(visible: Int) {
+        cameraIcon.visibility = visible
+        backButton.visibility = visible
+        shareLayout.visibility = visible
     }
 
     abstract fun getDefaultBabyIcon(): Int
